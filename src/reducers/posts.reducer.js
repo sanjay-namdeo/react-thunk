@@ -1,8 +1,8 @@
-const postReducer = (oldPosts = [], action) => {
+const posts = (oldPosts = [], action) => {
   if(action.type === 'FETCH_POST') {
-      return [...action.payload.response];
+      return [...action.payload.data];
   }
   return oldPosts;
 };
 
-export default postReducer;
+export default posts;
