@@ -9,17 +9,20 @@ class AuthorDetail extends React.Component {
     }
 
     render() {
-        const author = this.props.authors.find((a) => a.data.id === this.props.authorId);
+        let {author} = this.props;
+
         return (
             <div>
-                <h5>Author: {(author && author.data) ? author.data.name : ''}</h5>
+                <h5>Author: {(author&&author.data)?author.data.name: ''}</h5>
             </div>
         );
     }
 }
-
-const mapStateToProps = (state) => {
-    return state;
+// Accepts state and components props known as ownProps
+const mapStateToProps = (state, ownProps) => {
+    return {
+        author: state.authors.find((author) => author.data.id === ownProps.authorId)
+    };
 }
 
 export default connect(mapStateToProps, {fetchAuthor})(AuthorDetail);
