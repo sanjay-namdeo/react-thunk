@@ -1,27 +1,30 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {fetchPosts} from '../actions';
+import {fetchPostsAndUsers} from '../actions';
 import AuthorDetail from "./AuthorDetails";
 
 class PostList extends Component {
     componentDidMount() {
-        this.props.fetchPosts();
+        this.props.fetchPostsAndUsers();
     }
 
     renderList = () => {
-        return this.props.posts.map((post) =>
-            <div className="item" key={post.id}>
+        return this.props.posts.map((post) => {
+            const author = this.props.authors.find((author) => author.data.id === post.userId);
+            const authorName = (author && author.data) ? author.data.name : '';
+
+            return (<div className="item" key={post.id}>
                 <div className="content">
                     <div className="header">{post.title}</div>
                     <div className="description">
                         <p>{post.body}</p>
                     </div>
                     <div className="extra">
-                        <AuthorDetail authorId={post.userId}/>
+                        <AuthorDetail author={authorName}/>
                     </div>
                 </div>
-            </div>
-        );
+            </div>)
+        });
     }
 
     render() {
@@ -37,4 +40,4 @@ const mapStateToPros = (state) => {
     return state;
 }
 
-export default connect(mapStateToPros, {fetchPosts})(PostList);
+export default connect(mapStateToPros, {fetchPostsAndUsers})(PostList);

@@ -1,5 +1,20 @@
 import jsonPlaceholder from "../components/jsonPlaceholder";
-import _ from 'lodash';
+
+const fetchPostsAndUsers = () => {
+    return async function (dispatch, getState) {
+        await dispatch(fetchPosts()); // Wait to fetch posts
+        const posts = getState().posts; // Get all posts
+        let users = [];
+        // get unique user id
+        for (let post of posts) {
+            if(users.indexOf(post.userId)===-1) {
+                users.push(post.userId);
+                await dispatch(fetchAuthor(post.userId));
+            }
+        }
+
+    }
+}
 
 const fetchPosts = () => {
     return async (dispatch) => {
@@ -11,18 +26,14 @@ const fetchPosts = () => {
     }
 };
 
-const fetchAuthor = (authorId) =>{
-    return (dispatch) => {
-        _fetchUser(authorId, dispatch);
+const fetchAuthor = (authorId) => {
+    return async (dispatch) => {
+        const response = await jsonPlaceholder.get(`/users/${authorId}`);
+        dispatch({
+            type: 'FETCH_AUTHOR',
+            payload: response
+        });
     }
 }
-// Memorize user data so that only a single network request is sent per user
-const _fetchUser = _.memoize(async (authorId, dispatch) => {
-    const response = await jsonPlaceholder.get(`/users/${authorId}`);
-    dispatch({
-        type: 'FETCH_AUTHOR',
-        payload: response
-    });
-});
 
-export {fetchPosts, fetchAuthor};
+export {fetchPosts, fetchAuthor, fetchPostsAndUsers};
