@@ -9,7 +9,7 @@ class PostList extends Component {
     }
 
     renderList = () => {
-        return this.props.posts.filter(post => post.id < 11).map((post) =>
+        return this.props.posts.map((post) =>
             <div className="item" key={post.id}>
                 <div className="content">
                     <div className="header">{post.title}</div>
