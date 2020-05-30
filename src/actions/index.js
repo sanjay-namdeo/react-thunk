@@ -9,7 +9,7 @@ const fetchPostsAndUsers = () => {
         for (let post of posts) {
             if(users.indexOf(post.userId)===-1) {
                 users.push(post.userId);
-                await dispatch(fetchAuthor(post.userId));
+                dispatch(fetchAuthor(post.userId));
             }
         }
 
